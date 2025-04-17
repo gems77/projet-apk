@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Téléchargement APK</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Télécharger l'application mobile</h1>
+        <p>Veuillez remplir ce formulaire pour accéder au téléchargement</p>
+        
+        <form id="download method="POST">
+            <div class="form-group">
+                <label for="lastname">Nom *</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="firstname">Prénom *</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Numéro de téléphone *</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="filiere">Filière *</label>
+                <select id="filiere" name="filiere" required>
+                    <option value="">Sélectionnez votre filière</option>
+                    <option value="informatique">Informatique</option>
+                    <option value="gestion">Gestion</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <button type="submit" class="btn">Télécharger l'APK</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
