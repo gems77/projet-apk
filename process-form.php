@@ -1,33 +1,40 @@
 <?php
+require 'config.php';
+
 header('Content-Type: application/json');
 
-// Récupération des données
-$data = json_decode(file_get_contents('php://input'), true);
+try {
+    $data = json_decode(file_get_contents('php://input'), true);
+    
+    // Validation
+    $required = ['lastname', 'firstname', 'phone', 'filiere', 'email'];
+    foreach ($required as $field) {
+        if (empty($data[$field])) {
+            throw new Exception("Le champ $field est requis");
+        }
+    }
 
-// Validation simple
-if(empty($data['lastname']) || empty($data['firstname']) || empty($data['phone']) || empty($data['filiere']) || empty($data['email'])) {
-    echo json_encode(['success' => false, 'message' => 'Tous les champs sont obligatoires']);
-    exit;
+    // Insertion en base
+    $pdo = getPDO();
+    $stmt = $pdo->prepare("INSERT INTO downloads 
+                          (nom, prenom, telephone, filiere, email)
+                          VALUES (?, ?, ?, ?, ?)");
+    
+    $stmt->execute([
+        $data['lastname'],
+        $data['firstname'],
+        $data['phone'],
+        $data['filiere'],
+        $data['email']
+    ]);
+
+    echo json_encode(['success' => true]);
+
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
 }
-
-if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'message' => 'Email invalide']);
-    exit;
-}
-
-// Ici vous pourriez enregistrer les données dans une base de données
-// Exemple simplifié avec enregistrement dans un fichier CSV
-$file = 'submissions.csv';
-$handle = fopen($file, 'a');
-fputcsv($handle, [
-    date('Y-m-d H:i:s'),
-    $data['lastname'],
-    $data['firstname'],
-    $data['phone'],
-    $data['filiere'],
-    $data['email']
-]);
-fclose($handle);
-
-echo json_encode(['success' => true]);
 ?>
